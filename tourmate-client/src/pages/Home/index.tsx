@@ -1,12 +1,14 @@
-
-
-import React from 'react'
-import SearchBar from './SearchBar'
+import React from "react";
+import SearchBar from "./SearchBar";
+import DataForm from "./DataForm";
 
 const Home = () => {
   return (
-    <SearchBar/>
-  )
-}
+    <div>
+      <SearchBar />
+      <DataForm />
+    </div>
+  );
+};
 
-export default Home
+export default Home;

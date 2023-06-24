@@ -16,12 +16,17 @@
     "@mui/material": "^5.13.5",
     "@mui/system": "^5.13.5",
     "@mui/types": "^7.2.4",
+    "@mui/x-date-pickers": "^6.9.0",
     "@react-google-maps/api": "^2.18.1",
     "@types/autosuggest-highlight": "^3.2.0",
     "@types/markerclustererplus": "^2.1.33",
+    "@types/yup": "^0.32.0",
     "autosuggest-highlight": "^3.3.4",
+    "dayjs": "^1.11.8",
+    "formik": "^2.4.2",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react-dom": "^18.2.0",
+    "yup": "^1.2.0"
   },
   "devDependencies": {
     "@types/google.maps": "^3.53.4",
