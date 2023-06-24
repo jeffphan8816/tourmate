@@ -45,6 +45,11 @@ export default function SearchBar() {
   const [options, setOptions] = useState<readonly PlaceType[]>([]);
   const loaded = useRef(false);
   const googleApiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
+  useEffect(() => {
+    if (value) {
+      setInputValue(value.description);
+    }
+  }, [value]);
 
   if (typeof window !== "undefined" && !loaded.current) {
     if (!document.querySelector("#google-maps")) {
@@ -138,7 +143,6 @@ export default function SearchBar() {
       renderInput={(params) => (
         <TextField
           {...params}
-          // label='Where you want to go?'
           fullWidth
           placeholder='Where you want to go?'
           InputProps={{
