@@ -1,0 +1,12 @@
+.logo {
+  margin-left: 50px;
+}
+
+#logoTypo {
+  font-weight: bold;
+  font-size: clamp(1rem, 2rem, 2.25rem);
+}
+
+.navbarButton {
+  color: "inherit";
+}
