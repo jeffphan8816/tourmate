@@ -8,6 +8,7 @@ import { useMemo } from "react";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import { CssBaseline, PaletteMode } from "@mui/material";
 import Home from "./pages/Home";
+import Footer from "./pages/Layout/Footer";
 
 
 const ColorModeContext = React.createContext({ toggleColorMode: () => {
@@ -37,6 +38,7 @@ function App() {
         <CssBaseline />
         <Header colorMode={colorMode}/>
         <Home/>
+        <Footer/>
       </ThemeProvider>
     </ColorModeContext.Provider>
   );

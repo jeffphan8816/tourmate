@@ -101,7 +101,8 @@ const DataForm = () => {
     initialValues: initialValuesDataForm,
     validationSchema: dataFormSchema,
     onSubmit: (values) => {
-      alert(JSON.stringify(values, null, 2));
+      // alert(JSON.stringify(values, null, 2));
+      //TODO: Send data to backend
       console.log(JSON.stringify(values, null, 2));
     },
   });

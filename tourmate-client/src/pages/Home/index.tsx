@@ -5,7 +5,6 @@ import DataForm from "./DataForm";
 const Home = () => {
   return (
     <div>
-      
       <DataForm />
     </div>
   );

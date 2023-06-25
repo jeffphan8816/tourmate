@@ -15,4 +15,7 @@ declare module '@mui/material/styles/createPalette' {
   }
 }
 
+
+
+
 // export default function createPalette(palette: PaletteOptions): Palette;
