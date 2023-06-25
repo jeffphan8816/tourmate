@@ -6,7 +6,6 @@ import {
   DateTimePicker,
   DateTimePickerProps,
 } from "@mui/x-date-pickers/DateTimePicker";
-
 import { useFormik } from "formik";
 import * as yup from "yup";
 import {
@@ -19,20 +18,52 @@ import {
   FormHelperText,
   TextField,
 } from "@mui/material";
-
-type Props<TDate> = {
-  name: string;
-} & Omit<DateTimePickerProps<TDate>, "onChange" | "value">;
+import SearchBar from "../SearchBar";
+import { PlaceType } from "../SearchBar";
 
 const dataFormSchema = yup.object().shape({
+  location: yup.object().shape({
+    description: yup.string().required("Location is required"),
+    matched_substrings: yup.array().of(
+      yup.object().shape({
+        offset: yup.number(),
+        length: yup.number(),
+      })
+    ),
+    place_id: yup.string().required("Location is required"),
+    reference: yup.string().required("Location is required"),
+    structured_formatting: yup.object().shape({
+      main_text: yup.string().required("Location is required"),
+      secondary_text: yup.string().required("Location is required"),
+      main_text_matched_substrings: yup.array().of(
+        yup.object().shape({
+          offset: yup.number(),
+          length: yup.number(),
+        })
+      ),
+    }),
+    types: yup.array().of(yup.string()),
+    terms: yup.array().of(
+      yup.object().shape({
+        offset: yup.number(),
+        value: yup.string(),
+      })
+    ),
+  }),
   budget: yup.number().required("Budget is required"),
   numberOfCompanions: yup.number().required("Number of companions is required"),
-  accommodation: yup.string().required("Accommodation preference is required"),
-  transportation: yup
-    .string()
+  accommodations: yup
+    .array()
+    .of(yup.string())
+    .min(1, "At least one accommodation must be selected")
+    .required("Accommodation preference is required"),
+  transportations: yup
+    .array()
+    .of(yup.string())
+    .min(1, "At least one transportation must be selected")
     .required("Transportation preference is required"),
-  sightseeing: yup.string().required("Sightseeing preference is required"),
-  interests: yup.string().required("Interests are required"),
+  // sightseeing: yup.string().required("Sightseeing preference is required"),
+  // interests: yup.string().required("Interests are required"),
   startDate: yup.date().required("Start date is required"),
   endDate: yup
     .date()
@@ -44,40 +75,41 @@ const dataFormSchema = yup.object().shape({
 });
 
 const initialValuesDataForm = {
+  location: [] as PlaceType[],
   budget: "",
   numberOfCompanions: "",
-  accommodation: "",
-  transportation: "",
-  sightseeing: "",
-  interests: "",
+  accommodations: [] as string[],
+  transportations: [] as string[],
+  // sightseeing: "",
+  // interests: "",
   startDate: dayjs(),
   endDate: dayjs(),
 };
 
+const accomodationOptions = [
+  "Hotel",
+  "Airbnb",
+  "Camping",
+  "Motel",
+  "Homestay",
+  "Others",
+];
+const transportationOptions = ["Car", "Bus", "Plane", "Motorbike", "Others"];
+
 const DataForm = () => {
-  const [startDate, setStartDate] = useState<Dayjs | null>(dayjs());
-  const [endDate, setEndDate] = useState<Dayjs | null>(dayjs());
-  const [dataState, setDataState] = React.useState({
-    budget: "",
-    numberOfCompanions: "",
-    accommodation: "",
-    transportation: "",
-    sightseeing: "",
-    interests: "",
-    startDate: dayjs(),
-    endDate: dayjs(),
-  });
   const formik = useFormik({
     initialValues: initialValuesDataForm,
     validationSchema: dataFormSchema,
     onSubmit: (values) => {
       alert(JSON.stringify(values, null, 2));
+      console.log(JSON.stringify(values, null, 2));
     },
   });
 
   return (
     <div>
       <form onSubmit={formik.handleSubmit}>
+        <SearchBar onSearchChange={formik.setFieldValue} />
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <DateTimePicker
             onChange={(newValue) =>
@@ -146,12 +178,58 @@ const DataForm = () => {
           }
         />
         <FormGroup>
-          <FormControlLabel
-            control={<Checkbox defaultChecked />}
-            label='Label'
-          />
-          <FormControlLabel control={<Checkbox />} label='Required' />
-          <FormControlLabel control={<Checkbox />} label='Disabled' />
+          {accomodationOptions.map((accommodation) => (
+            <FormControlLabel
+              id='accommodations'
+              key={`accommodations_${accommodation}}`}
+              control={
+                <Checkbox
+                  name='accommodations'
+                  checked={formik.values.accommodations.includes(accommodation)}
+                  onChange={() => {
+                    formik.setFieldValue(
+                      "accommodations",
+                      formik.values.accommodations.includes(accommodation)
+                        ? formik.values.accommodations.filter(
+                            (data) => data !== accommodation
+                          )
+                        : [...formik.values.accommodations, accommodation],
+                      true
+                    );
+                  }}
+                />
+              }
+              label={accommodation}
+            />
+          ))}
+        </FormGroup>
+        <FormGroup>
+          {transportationOptions.map((transportation) => (
+            <FormControlLabel
+              key={`transportations_${transportation}}`}
+              id='transportations'
+              control={
+                <Checkbox
+                  name='transportations'
+                  checked={formik.values.transportations.includes(
+                    transportation
+                  )}
+                  onChange={() => {
+                    formik.setFieldValue(
+                      "transportations",
+                      formik.values.transportations.includes(transportation)
+                        ? formik.values.transportations.filter(
+                            (data) => data !== transportation
+                          )
+                        : [...formik.values.transportations, transportation],
+                      true
+                    );
+                  }}
+                />
+              }
+              label={transportation}
+            />
+          ))}
         </FormGroup>
 
         <Button color='primary' variant='contained' fullWidth type='submit'>

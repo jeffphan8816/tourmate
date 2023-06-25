@@ -29,17 +29,21 @@ interface MainTextMatchedSubstrings {
   offset: number;
   length: number;
 }
-interface StructuredFormatting {
+export interface StructuredFormatting {
   main_text: string;
   secondary_text: string;
   main_text_matched_substrings?: readonly MainTextMatchedSubstrings[];
 }
-interface PlaceType {
+export interface PlaceType {
   description: string;
   structured_formatting: StructuredFormatting;
 }
 
-export default function SearchBar() {
+interface SearchBarProps {
+  onSearchChange: (field: string, value: PlaceType | null, shouldValidate?: boolean) => void;
+}
+
+const SearchBar = ({ onSearchChange }: SearchBarProps)  => {
   const [value, setValue] = useState<PlaceType | null>(null);
   const [inputValue, setInputValue] = useState("");
   const [options, setOptions] = useState<readonly PlaceType[]>([]);
@@ -48,6 +52,7 @@ export default function SearchBar() {
   useEffect(() => {
     if (value) {
       setInputValue(value.description);
+
     }
   }, [value]);
 
@@ -120,7 +125,6 @@ export default function SearchBar() {
 
   return (
     <Autocomplete
-      id='google-map-demo'
       sx={{ width: 300 }}
       getOptionLabel={(option) =>
         typeof option === "string" ? option : option.description
@@ -136,6 +140,7 @@ export default function SearchBar() {
       onChange={(event: any, newValue: PlaceType | null) => {
         setOptions(newValue ? [newValue, ...options] : options);
         setValue(newValue);
+        onSearchChange("location",newValue);
       }}
       onInputChange={(event, newInputValue) => {
         setInputValue(newInputValue);
@@ -145,6 +150,8 @@ export default function SearchBar() {
           {...params}
           fullWidth
           placeholder='Where you want to go?'
+          id="location"
+          name="location"
           InputProps={{
             ...params.InputProps,
             startAdornment: (
@@ -196,4 +203,6 @@ export default function SearchBar() {
       }}
     />
   );
-}
+};
+
+export default SearchBar;

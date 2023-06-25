@@ -5,7 +5,7 @@ import DataForm from "./DataForm";
 const Home = () => {
   return (
     <div>
-      <SearchBar />
+      
       <DataForm />
     </div>
   );
