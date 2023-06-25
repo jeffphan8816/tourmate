@@ -41,9 +41,11 @@ export interface PlaceType {
 
 interface SearchBarProps {
   onSearchChange: (field: string, value: PlaceType | null, shouldValidate?: boolean) => void;
+  where: string;
+  placeHolder: string;
 }
 
-const SearchBar = ({ onSearchChange }: SearchBarProps)  => {
+const SearchBar = ({ onSearchChange, where, placeHolder }: SearchBarProps)  => {
   const [value, setValue] = useState<PlaceType | null>(null);
   const [inputValue, setInputValue] = useState("");
   const [options, setOptions] = useState<readonly PlaceType[]>([]);
@@ -125,7 +127,7 @@ const SearchBar = ({ onSearchChange }: SearchBarProps)  => {
 
   return (
     <Autocomplete
-      sx={{ width: 300 }}
+      sx={{ width: "50%", margin: "0.5rem 1rem" }}
       getOptionLabel={(option) =>
         typeof option === "string" ? option : option.description
       }
@@ -149,9 +151,9 @@ const SearchBar = ({ onSearchChange }: SearchBarProps)  => {
         <TextField
           {...params}
           fullWidth
-          placeholder='Where you want to go?'
-          id="location"
-          name="location"
+          placeholder={placeHolder}
+          id={where}
+          name={where}
           InputProps={{
             ...params.InputProps,
             startAdornment: (

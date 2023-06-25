@@ -1,25 +1,20 @@
-import React, { useState } from "react";
 import dayjs, { Dayjs } from "dayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import {
-  DateTimePicker,
-  DateTimePickerProps,
-} from "@mui/x-date-pickers/DateTimePicker";
+import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 import { useFormik } from "formik";
 import * as yup from "yup";
 import {
   Box,
   Button,
   Checkbox,
-  FormControl,
   FormControlLabel,
   FormGroup,
-  FormHelperText,
   TextField,
 } from "@mui/material";
 import SearchBar from "../SearchBar";
 import { PlaceType } from "../SearchBar";
+import FlexBox from "../../../components/FlexBox";
 
 const dataFormSchema = yup.object().shape({
   location: yup.object().shape({
@@ -107,137 +102,160 @@ const DataForm = () => {
     },
   });
 
+  //TODO: Add Departure and Destination
   return (
-    <div>
+    <Box width='80%' margin='0 auto'>
       <form onSubmit={formik.handleSubmit}>
-        <SearchBar onSearchChange={formik.setFieldValue} />
-        <LocalizationProvider dateAdapter={AdapterDayjs}>
-          <DateTimePicker
-            onChange={(newValue) =>
-              formik.setFieldValue("startDate", newValue, true)
-            }
-            value={formik.values.startDate}
-            label='Start Date'
-            views={["day", "month", "year", "hours", "minutes"]}
-            format='hh:mm A DD/MM/YYYY'
-            slotProps={{
-              textField: {
-                variant: "outlined",
-                error:
-                  formik.touched.startDate && Boolean(formik.errors.startDate),
-                helperText:
-                  formik.touched.startDate && formik.errors.startDate
-                    ? JSON.stringify(formik.errors.startDate) // Convert to string
-                    : "",
-              },
-            }}
+        <FlexBox>
+          <SearchBar
+            onSearchChange={formik.setFieldValue}
+            where='departure'
+            placeHolder='Where you departure from?'
           />
-          <DateTimePicker
-            onChange={(newValue) =>
-              formik.setFieldValue("endDate", newValue, true)
-            }
-            value={formik.values.endDate}
-            label='End Date'
-            views={["day", "month", "year", "hours", "minutes"]}
-            format='hh:mm A DD/MM/YYYY'
-            slotProps={{
-              textField: {
-                variant: "outlined",
-                error: formik.touched.endDate && Boolean(formik.errors.endDate),
-                helperText:
-                  formik.touched.endDate && formik.errors.endDate
-                    ? JSON.stringify(formik.errors.endDate) // Convert to string
-                    : "",
-              },
-            }}
+          <SearchBar
+            onSearchChange={formik.setFieldValue}
+            where='destination'
+            placeHolder='Where you want to go?'
           />
-        </LocalizationProvider>
-        <TextField
-          id='budget'
-          name='budget'
-          label='Budget'
-          type='number'
-          value={formik.values.budget}
-          onChange={formik.handleChange}
-          error={formik.touched.budget && Boolean(formik.errors.budget)}
-          helperText={formik.touched.budget && formik.errors.budget}
-        />
-        <TextField
-          id='numberOfCompanions'
-          name='numberOfCompanions'
-          label='Number of Companions'
-          type='number'
-          value={formik.values.numberOfCompanions}
-          onChange={formik.handleChange}
-          error={
-            formik.touched.numberOfCompanions &&
-            Boolean(formik.errors.numberOfCompanions)
-          }
-          helperText={
-            formik.touched.numberOfCompanions &&
-            formik.errors.numberOfCompanions
-          }
-        />
-        <FormGroup>
-          {accomodationOptions.map((accommodation) => (
-            <FormControlLabel
-              id='accommodations'
-              key={`accommodations_${accommodation}}`}
-              control={
-                <Checkbox
-                  name='accommodations'
-                  checked={formik.values.accommodations.includes(accommodation)}
-                  onChange={() => {
-                    formik.setFieldValue(
-                      "accommodations",
-                      formik.values.accommodations.includes(accommodation)
-                        ? formik.values.accommodations.filter(
-                            (data) => data !== accommodation
-                          )
-                        : [...formik.values.accommodations, accommodation],
-                      true
-                    );
-                  }}
-                />
+        </FlexBox>
+
+        <FlexBox>
+          <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <DateTimePicker sx={{ width: "50%", margin: "0.5rem 1rem" }}
+              onChange={(newValue) =>
+                formik.setFieldValue("startDate", newValue, true)
               }
-              label={accommodation}
+              value={formik.values.startDate}
+              label='Start Date'
+              views={["day", "month", "year", "hours", "minutes"]}
+              format='hh:mm A DD/MM/YYYY'
+              slotProps={{
+                textField: {
+                  variant: "outlined",
+                  error:
+                    formik.touched.startDate &&
+                    Boolean(formik.errors.startDate),
+                  helperText:
+                    formik.touched.startDate && formik.errors.startDate
+                      ? JSON.stringify(formik.errors.startDate) // Convert to string
+                      : "",
+                },
+              }}
             />
-          ))}
-        </FormGroup>
-        <FormGroup>
-          {transportationOptions.map((transportation) => (
-            <FormControlLabel
-              key={`transportations_${transportation}}`}
-              id='transportations'
-              control={
-                <Checkbox
-                  name='transportations'
-                  checked={formik.values.transportations.includes(
-                    transportation
-                  )}
-                  onChange={() => {
-                    formik.setFieldValue(
-                      "transportations",
-                      formik.values.transportations.includes(transportation)
-                        ? formik.values.transportations.filter(
-                            (data) => data !== transportation
-                          )
-                        : [...formik.values.transportations, transportation],
-                      true
-                    );
-                  }}
-                />
+            <DateTimePicker sx={{ width: "50%", margin: "0.5rem 1rem" }}
+              onChange={(newValue) =>
+                formik.setFieldValue("endDate", newValue, true)
               }
-              label={transportation}
+              value={formik.values.endDate}
+              label='End Date'
+              views={["day", "month", "year", "hours", "minutes"]}
+              format='hh:mm A DD/MM/YYYY'
+              slotProps={{
+                textField: {
+                  variant: "outlined",
+                  error:
+                    formik.touched.endDate && Boolean(formik.errors.endDate),
+                  helperText:
+                    formik.touched.endDate && formik.errors.endDate
+                      ? JSON.stringify(formik.errors.endDate) // Convert to string
+                      : "",
+                },
+              }}
             />
-          ))}
-        </FormGroup>
+          </LocalizationProvider>
+        </FlexBox>
+        <FlexBox>
+          <TextField
+            id='budget'
+            name='budget'
+            label='Budget'
+            type='number'
+            value={formik.values.budget}
+            onChange={formik.handleChange}
+            error={formik.touched.budget && Boolean(formik.errors.budget)}
+            helperText={formik.touched.budget && formik.errors.budget}
+          />
+          <TextField
+            id='numberOfCompanions'
+            name='numberOfCompanions'
+            label='Number of Companions'
+            type='number'
+            value={formik.values.numberOfCompanions}
+            onChange={formik.handleChange}
+            error={
+              formik.touched.numberOfCompanions &&
+              Boolean(formik.errors.numberOfCompanions)
+            }
+            helperText={
+              formik.touched.numberOfCompanions &&
+              formik.errors.numberOfCompanions
+            }
+          />
+        </FlexBox>
+        <FlexBox>
+          <FormGroup>
+            {accomodationOptions.map((accommodation) => (
+              <FormControlLabel
+                id='accommodations'
+                key={`accommodations_${accommodation}}`}
+                control={
+                  <Checkbox
+                    name='accommodations'
+                    checked={formik.values.accommodations.includes(
+                      accommodation
+                    )}
+                    onChange={() => {
+                      formik.setFieldValue(
+                        "accommodations",
+                        formik.values.accommodations.includes(accommodation)
+                          ? formik.values.accommodations.filter(
+                              (data) => data !== accommodation
+                            )
+                          : [...formik.values.accommodations, accommodation],
+                        true
+                      );
+                    }}
+                  />
+                }
+                label={accommodation}
+              />
+            ))}
+          </FormGroup>
+          <FormGroup>
+            {transportationOptions.map((transportation) => (
+              <FormControlLabel
+                key={`transportations_${transportation}}`}
+                id='transportations'
+                control={
+                  <Checkbox
+                    name='transportations'
+                    checked={formik.values.transportations.includes(
+                      transportation
+                    )}
+                    onChange={() => {
+                      formik.setFieldValue(
+                        "transportations",
+                        formik.values.transportations.includes(transportation)
+                          ? formik.values.transportations.filter(
+                              (data) => data !== transportation
+                            )
+                          : [...formik.values.transportations, transportation],
+                        true
+                      );
+                    }}
+                  />
+                }
+                label={transportation}
+              />
+            ))}
+          </FormGroup>
+        </FlexBox>
 
         <Button color='primary' variant='contained' fullWidth type='submit'>
           Submit
         </Button>
       </form>
-    </div>
+    </Box>
   );
 };
 
