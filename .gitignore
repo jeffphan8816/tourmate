@@ -25,3 +25,4 @@ dist-ssr
 
 .env
 /scraper/venv/
+/scraper/tripadvisorscraper/tripadvisorscraper/__pycache__
