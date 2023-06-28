@@ -26,3 +26,7 @@ dist-ssr
 .env
 /scraper/venv/
 /scraper/tripadvisorscraper/tripadvisorscraper/__pycache__
+scraper/tripadvisorscraper/tripadvisorscraper/spiders/__pycache__/
+*/__pycache__/
+scraper/tripadvisorscraper/tripadvisorscraper/proxies.txt
+attractions.json

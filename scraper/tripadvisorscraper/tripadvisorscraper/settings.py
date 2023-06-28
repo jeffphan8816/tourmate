@@ -12,20 +12,22 @@ BOT_NAME = "tripadvisorscraper"
 SPIDER_MODULES = ["tripadvisorscraper.spiders"]
 NEWSPIDER_MODULE = "tripadvisorscraper.spiders"
 
+# SPLASH_URL = 'http://localhost:8050'
+
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
-#USER_AGENT = "tripadvisorscraper (+http://www.yourdomain.com)"
+USER_AGENT = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/92.0.4515.159 Safari/537.36'
 
 # Obey robots.txt rules
 ROBOTSTXT_OBEY = False
 
 # Configure maximum concurrent requests performed by Scrapy (default: 16)
-#CONCURRENT_REQUESTS = 32
+# CONCURRENT_REQUESTS = 32
 
 # Configure a delay for requests for the same website (default: 0)
 # See https://docs.scrapy.org/en/latest/topics/settings.html#download-delay
 # See also autothrottle settings and docs
-#DOWNLOAD_DELAY = 3
+DOWNLOAD_DELAY = 1
 # The download delay setting will honor only one of:
 #CONCURRENT_REQUESTS_PER_DOMAIN = 16
 #CONCURRENT_REQUESTS_PER_IP = 16
@@ -44,16 +46,29 @@ ROBOTSTXT_OBEY = False
 
 # Enable or disable spider middlewares
 # See https://docs.scrapy.org/en/latest/topics/spider-middleware.html
-#SPIDER_MIDDLEWARES = {
+SPIDER_MIDDLEWARES = {
+    # 'scrapy_splash.SplashDeduplicateArgsMiddleware': 100,
 #    "tripadvisorscraper.middlewares.TripadvisorscraperSpiderMiddleware": 543,
-#}
+}
+
+
+# DUPEFILTER_CLASS = 'scrapy_splash.SplashAwareDupeFilter'
 
 # Enable or disable downloader middlewares
 # See https://docs.scrapy.org/en/latest/topics/downloader-middleware.html
-#DOWNLOADER_MIDDLEWARES = {
-#    "tripadvisorscraper.middlewares.TripadvisorscraperDownloaderMiddleware": 543,
-#}
+DOWNLOADER_MIDDLEWARES = {
+   # "tripadvisorscraper.middlewares.TripadvisorscraperDownloaderMiddleware": 543,
+   #  'scrapy_splash.SplashCookiesMiddleware': 723,
+   #  'scrapy_splash.SplashMiddleware': 725,
+   #  'scrapy.downloadermiddlewares.httpcompression.HttpCompressionMiddleware': 810,
 
+    # "http": "scrapy_playwright.handler.ScrapyPlaywrightDownloadHandler",
+    # "https": "scrapy_playwright.handler.ScrapyPlaywrightDownloadHandler",
+    # 'scrapy_playwright.middleware.PlaywrightMiddleware': 820,
+    'scrapy.downloadermiddlewares.useragent.UserAgentMiddleware': None,
+    'scrapy_user_agents.middlewares.RandomUserAgentMiddleware': 400,
+}
+# PLAYWRIGHT_BROWSER_TYPE = 'chromium'
 # Enable or disable extensions
 # See https://docs.scrapy.org/en/latest/topics/extensions.html
 #EXTENSIONS = {
@@ -89,5 +104,14 @@ ROBOTSTXT_OBEY = False
 
 # Set settings whose default value is deprecated to a future-proof value
 REQUEST_FINGERPRINTER_IMPLEMENTATION = "2.7"
-TWISTED_REACTOR = "twisted.internet.asyncioreactor.AsyncioSelectorReactor"
+# TWISTED_REACTOR = "twisted.internet.asyncioreactor.AsyncioSelectorReactor"
 FEED_EXPORT_ENCODING = "utf-8"
+
+TWISTED_REACTOR = "twisted.internet.asyncioreactor.AsyncioSelectorReactor"
+
+# Read proxy addresses from file
+with open('proxies.txt', 'r') as f:
+    proxies = [line.strip() for line in f if line.strip()]
+
+# Enable rotating proxies middleware
+ROTATING_PROXY_LIST = proxies
