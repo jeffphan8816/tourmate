@@ -16,7 +16,7 @@ NEWSPIDER_MODULE = "tripadvisorscraper.spiders"
 
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
-USER_AGENT = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/92.0.4515.159 Safari/537.36'
+# USER_AGENT = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/92.0.4515.159 Safari/537.36'
 
 # Obey robots.txt rules
 ROBOTSTXT_OBEY = False
@@ -27,7 +27,7 @@ ROBOTSTXT_OBEY = False
 # Configure a delay for requests for the same website (default: 0)
 # See https://docs.scrapy.org/en/latest/topics/settings.html#download-delay
 # See also autothrottle settings and docs
-DOWNLOAD_DELAY = 1
+DOWNLOAD_DELAY = 3
 # The download delay setting will honor only one of:
 #CONCURRENT_REQUESTS_PER_DOMAIN = 16
 #CONCURRENT_REQUESTS_PER_IP = 16
@@ -54,6 +54,9 @@ SPIDER_MIDDLEWARES = {
 
 # DUPEFILTER_CLASS = 'scrapy_splash.SplashAwareDupeFilter'
 
+SCRAPEOPS_API_KEY = '3240362e-9892-462f-943d-558e117997a5'
+SCRAPEOPS_FAKE_USER_AGENT_ENDPOINT = True
+
 # Enable or disable downloader middlewares
 # See https://docs.scrapy.org/en/latest/topics/downloader-middleware.html
 DOWNLOADER_MIDDLEWARES = {
@@ -65,8 +68,14 @@ DOWNLOADER_MIDDLEWARES = {
     # "http": "scrapy_playwright.handler.ScrapyPlaywrightDownloadHandler",
     # "https": "scrapy_playwright.handler.ScrapyPlaywrightDownloadHandler",
     # 'scrapy_playwright.middleware.PlaywrightMiddleware': 820,
+    # Disable the default UserAgentMiddleware
     'scrapy.downloadermiddlewares.useragent.UserAgentMiddleware': None,
-    'scrapy_user_agents.middlewares.RandomUserAgentMiddleware': 400,
+    'tripadvisorscraper.middlewares.ScrapeOpsFakeUserAgentMiddleware': 400,
+    # 'scrapy.downloadermiddlewares.useragent.UserAgentMiddleware': 400,
+    'tripadvisorscraper.middlewares.ExcludeExternalResourcesMiddleware': 543,
+    'tripadvisorscraper.middlewares.MinifyHtmlMiddleware': 543,
+    # 'scrapy_rotating_proxies.middlewares.RotatingProxyMiddleware': 610,
+    # 'scrapy_rotating_proxies.middlewares.BanDetectionMiddleware': 620,
 }
 # PLAYWRIGHT_BROWSER_TYPE = 'chromium'
 # Enable or disable extensions
@@ -109,9 +118,11 @@ FEED_EXPORT_ENCODING = "utf-8"
 
 TWISTED_REACTOR = "twisted.internet.asyncioreactor.AsyncioSelectorReactor"
 
-# Read proxy addresses from file
-with open('proxies.txt', 'r') as f:
-    proxies = [line.strip() for line in f if line.strip()]
+# # Read proxy addresses from file
+# with open('proxies.txt', 'r') as f:
+#     proxies = [line.strip() for line in f if line.strip()]
+#
+# # Enable rotating proxies middleware
+# ROTATING_PROXY_LIST = proxies
 
-# Enable rotating proxies middleware
-ROTATING_PROXY_LIST = proxies
+DOWNLOAD_IMAGES = False

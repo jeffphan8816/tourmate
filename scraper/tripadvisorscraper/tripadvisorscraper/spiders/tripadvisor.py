@@ -14,11 +14,15 @@ class TripadvisorSpider(scrapy.Spider):
     #     urls = ["https://www.tripadvisor.com/Attractions-g293925-Activities-oa0-Ho_Chi_Minh_City.html"]
     #     for url in urls:
     #         yield scrapy.Request(url=url, callback=self.parse)
+
     async def errback(self, failure):
         page = failure.request.meta["playwright_page"]
         await page.close()
     def parse(self, response):
+        content_length = int(response.headers.get('Content-Length', 0))
+        self.log(f"Data usage for {response.url}: {content_length} bytes")
         attractions = response.css("header[style='flex-direction:row']")
+        print(len(attractions))
         for attraction in attractions:
             link = attraction.css("a::attr(href)").get()
             yield response.follow(
@@ -40,13 +44,15 @@ class TripadvisorSpider(scrapy.Spider):
         # await page.close()
         # await page.click('button[aria-label="Open Hours"]')
 
+        content_length = int(response.headers.get('Content-Length', 0))
+        self.log(f"Data usage for {response.url}: {content_length} bytes")
         title = response.css("h1[data-automation='mainH1']::text").get()
-        duration = response.css('div[class="biGQs _P fiohW ncFvv fOtGX"]+div::text').get()
+        duration = response.css('div[class="biGQs _P fiohW ncFvv fOtGX"]+div._c::text').get()
         category = response.css("div[style='line-break:normal;cursor:auto']::text").get()
         url = response.url
         description = response.css('div._d.MJ > div > div.fIrGe._T.bgMZj > div::text').get()
-        ratings = response.css('span.LEuOZ f::text').get()
-        numberofreviews = response.css('span.KAVFZ::text')[0].get()
+        ratings = response.css('span[class="LEuOZ f"]::text').get()
+        numberofreviews = response.css('span.KAVFZ::text').get()
         address = response.css('div.wgNTK>div>button>span::text').get()
         # splash:evaljs(javascript)
         # div_with_text = response.xpath('//div[contains(text(), "Open hours")]')
