@@ -11,6 +11,7 @@ from random import randint
 import requests
 # useful for handling different item types with a single interface
 from itemadapter import is_item, ItemAdapter
+from scrapy.exceptions import IgnoreRequest
 
 
 class TripadvisorscraperSpiderMiddleware:
@@ -118,9 +119,28 @@ class ExcludeExternalResourcesMiddleware:
 
         return response
 
+    def process_request(self, request, spider):
+        user_agent = request.headers.get('User-Agent', '').decode('utf-8')
+
+        # Exclude images for non-browser requests
+        if 'Mozilla' not in user_agent:
+            return None
+
+        content_type = request.headers.get('Content-Type', b'').decode('utf-8')
+
+        # Exclude images based on content type
+        if content_type.startswith('image/'):
+            raise IgnoreRequest('Images are not allowed on this website.')
+
+        return None
+
     def exclude_scripts(self, body):
         # Code to exclude external scripts from the response body
         # Implement your logic here to remove or modify script tags
+
+        body = body.decode('utf-8')
+        script_pattern = re.compile(r'<script.*?</script>', re.DOTALL)
+        body = re.sub(script_pattern, '', body)
 
         return body
 

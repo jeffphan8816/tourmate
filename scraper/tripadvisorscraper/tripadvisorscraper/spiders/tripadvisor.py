@@ -1,5 +1,7 @@
 import scrapy
+from scrapy.crawler import CrawlerProcess
 from scrapy.exceptions import ScrapyDeprecationWarning
+from scrapy.statscollectors import MemoryStatsCollector
 from scrapy_playwright.page import PageMethod
 from scrapy_splash import SplashRequest
 import warnings
@@ -76,6 +78,3 @@ class TripadvisorSpider(scrapy.Spider):
             'Address': address,
             'Open Hours': openhours,
         }
-
-
-
