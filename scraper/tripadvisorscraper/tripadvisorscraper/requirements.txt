@@ -1,0 +1,6 @@
+requests
+scrapy
+scrapy-selenium
+webdriver-manager
+scrapy-playwright
+htmlmin

@@ -3,7 +3,6 @@ from scrapy.crawler import CrawlerProcess
 from scrapy.exceptions import ScrapyDeprecationWarning
 from scrapy.statscollectors import MemoryStatsCollector
 from scrapy_playwright.page import PageMethod
-from scrapy_splash import SplashRequest
 import warnings
 warnings.filterwarnings("ignore", category=ScrapyDeprecationWarning)
 
@@ -22,9 +21,7 @@ class TripadvisorSpider(scrapy.Spider):
         await page.close()
     def parse(self, response):
         content_length = int(response.headers.get('Content-Length', 0))
-        self.log(f"Data usage for {response.url}: {content_length} bytes")
         attractions = response.css("header[style='flex-direction:row']")
-        print(len(attractions))
         for attraction in attractions:
             link = attraction.css("a::attr(href)").get()
             yield response.follow(

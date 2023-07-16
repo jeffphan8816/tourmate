@@ -61,12 +61,8 @@ SCRAPEOPS_FAKE_USER_AGENT_ENDPOINT = True
 # See https://docs.scrapy.org/en/latest/topics/downloader-middleware.html
 DOWNLOADER_MIDDLEWARES = {
    # "tripadvisorscraper.middlewares.TripadvisorscraperDownloaderMiddleware": 543,
-   #  'scrapy_splash.SplashCookiesMiddleware': 723,
-   #  'scrapy_splash.SplashMiddleware': 725,
    #  'scrapy.downloadermiddlewares.httpcompression.HttpCompressionMiddleware': 810,
 
-    # "http": "scrapy_playwright.handler.ScrapyPlaywrightDownloadHandler",
-    # "https": "scrapy_playwright.handler.ScrapyPlaywrightDownloadHandler",
     # 'scrapy_playwright.middleware.PlaywrightMiddleware': 820,
     # Disable the default UserAgentMiddleware
     'scrapy.downloadermiddlewares.useragent.UserAgentMiddleware': None,
@@ -77,7 +73,7 @@ DOWNLOADER_MIDDLEWARES = {
     # 'scrapy_rotating_proxies.middlewares.RotatingProxyMiddleware': 610,
     # 'scrapy_rotating_proxies.middlewares.BanDetectionMiddleware': 620,
 }
-# PLAYWRIGHT_BROWSER_TYPE = 'chromium'
+PLAYWRIGHT_BROWSER_TYPE = 'chromium'
 # Enable or disable extensions
 # See https://docs.scrapy.org/en/latest/topics/extensions.html
 #EXTENSIONS = {
@@ -126,3 +122,8 @@ TWISTED_REACTOR = "twisted.internet.asyncioreactor.AsyncioSelectorReactor"
 # ROTATING_PROXY_LIST = proxies
 
 DOWNLOAD_IMAGES = False
+
+DOWNLOAD_HANDLERS = {
+    "http": "scrapy_playwright.handler.ScrapyPlaywrightDownloadHandler",
+    "https": "scrapy_playwright.handler.ScrapyPlaywrightDownloadHandler",
+}

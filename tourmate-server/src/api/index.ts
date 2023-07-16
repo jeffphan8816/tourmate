@@ -13,4 +13,10 @@ router.get<{}, MessageResponse>('/', (req, res) => {
 
 router.use('/emojis', emojis);
 
+router.post<{}, MessageResponse>('/search', (req, res) => {
+  res.json({
+    message: 'test - 👋🌎🌍🌏',
+  });
+});
+
 export default router;
